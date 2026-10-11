@@ -3,29 +3,37 @@ type PercentileBarProps = {
   percentile: number
 }
 
-function PercentileBar({ label, percentile }: PercentileBarProps) {
-  let barColor = 'bg-slate-500'
+function PercentileBar({
+  label,
+  percentile,
+}: PercentileBarProps) {
+  let barColor = 'bg-pivot-yellow'
 
   if (percentile >= 90) {
-    barColor = 'bg-green-500'
-  } else if (percentile >= 75) {
-    barColor = 'bg-lime-500'
+    barColor = 'bg-pivot-green'
+  } else if (percentile >= 70) {
+    barColor = 'bg-pivot-lime'
   } else if (percentile >= 40) {
-    barColor = 'bg-yellow-500'
+    barColor = 'bg-pivot-yellow'
   } else if (percentile >= 20) {
-    barColor = 'bg-orange-500'
+    barColor = 'bg-pivot-orange'
   } else {
-    barColor = 'bg-red-500'
+    barColor = 'bg-pivot-red'
   }
 
   return (
     <div>
-      <div className="mb-1 flex justify-between text-sm">
-        <span>{label}</span>
-        <span>{percentile}th</span>
+      <div className="mb-2 flex items-end justify-between">
+        <span className="text-xs font-bold uppercase tracking-[0.12em] text-pivot-muted">
+          {label}
+        </span>
+
+        <span className="font-mono text-sm font-bold text-pivot-text">
+          {percentile}
+        </span>
       </div>
 
-      <div className="h-2 overflow-hidden rounded-full bg-slate-800">
+      <div className="h-3 border border-pivot-border bg-pivot-bg">
         <div
           className={`h-full ${barColor}`}
           style={{ width: `${percentile}%` }}

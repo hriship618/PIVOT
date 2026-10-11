@@ -1,1 +1,36 @@
 @import "tailwindcss";
+
+@theme {
+  --color-pivot-bg: #d6cebf;
+  --color-pivot-surface: #c9c0b1;
+  --color-pivot-surface-2: #b9af9f;
+
+  --color-pivot-border: #1b1a17;
+  --color-pivot-divider: #8f877b;
+
+  --color-pivot-text: #1a1916;
+  --color-pivot-muted: #5f5a52;
+
+  --color-pivot-green: #56705d;
+  --color-pivot-lime: #7b8560;
+  --color-pivot-yellow: #a08f63;
+  --color-pivot-orange: #9b735d;
+  --color-pivot-red: #8c5f59;
+}
+
+body {
+  margin: 0;
+  background: #d6cebf;
+  color: #1a1916;
+  font-family:
+    "Segoe UI",
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}

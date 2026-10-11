@@ -149,81 +149,88 @@ function RankingsPage() {
     positionFilter !== 'All'
 
   return (
-    <main className="px-8 py-10">
-      <h2 className="text-4xl font-bold">
-        Player Rankings
-      </h2>
+    <main className="mx-auto max-w-7xl px-6 py-12 md:px-8">
+      <div className="border-b-2 border-pivot-border pb-6">
+        <h1 className="text-5xl font-bold tracking-tight text-pivot-text">
+          Player Rankings
+        </h1>
+      </div>
 
-      <p className="mt-2 text-slate-400">
-        Explore PIVOT player impact scores.
-      </p>
-
-      <div className="mt-6 flex flex-col gap-4 md:flex-row md:flex-wrap">
+      <div className="mt-8 flex flex-col gap-3 md:flex-row md:flex-wrap">
         <input
           type="text"
           placeholder="Search players..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-white outline-none md:max-w-md"
+          className="w-full border-2 border-pivot-border bg-pivot-surface px-4 py-3 text-pivot-text outline-none placeholder:text-pivot-muted focus:bg-pivot-surface-2 md:max-w-md"
         />
 
-        <select
-          value={sortOrder}
-          onChange={(event) => setSortOrder(event.target.value)}
-          className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-white"
-        >
-          <option value="desc">
-            PIVOT: High to Low
-          </option>
+        <div className="relative">
+          <select
+            value={sortOrder}
+            onChange={(event) => setSortOrder(event.target.value)}
+            className="appearance-none border-2 border-pivot-border bg-pivot-surface py-3 pl-4 pr-10 text-pivot-text outline-none"
+          >
+            <option value="desc">PIVOT: High to Low</option>
+            <option value="asc">PIVOT: Low to High</option>
+          </select>
 
-          <option value="asc">
-            PIVOT: Low to High
-          </option>
-        </select>
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-pivot-text">
+            ▼
+          </span>
+        </div>
 
-        <select
-          value={teamFilter}
-          onChange={(event) => setTeamFilter(event.target.value)}
-          className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-white"
-        >
-          <option value="All">
-            All Teams
-          </option>
+        <div className="relative">
+          <select
+            value={teamFilter}
+            onChange={(event) => setTeamFilter(event.target.value)}
+            className="appearance-none border-2 border-pivot-border bg-pivot-surface py-3 pl-4 pr-10 text-pivot-text outline-none"
+          >
+            <option value="All">All Teams</option>
 
-          {teams.map((team) => (
-            <option key={team} value={team}>
-              {team}
-            </option>
-          ))}
-        </select>
+            {teams.map((team) => (
+              <option key={team} value={team}>
+                {team}
+              </option>
+            ))}
+          </select>
 
-        <select
-          value={positionFilter}
-          onChange={(event) => setPositionFilter(event.target.value)}
-          className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-white"
-        >
-          <option value="All">
-            All Positions
-          </option>
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-pivot-text">
+            ▼
+          </span>
+        </div>
 
-          {positions.map((position) => (
-            <option key={position} value={position}>
-              {position}
-            </option>
-          ))}
-        </select>
+        <div className="relative">
+          <select
+            value={positionFilter}
+            onChange={(event) => setPositionFilter(event.target.value)}
+            className="appearance-none border-2 border-pivot-border bg-pivot-surface py-3 pl-4 pr-10 text-pivot-text outline-none"
+          >
+            <option value="All">All Positions</option>
+
+            {positions.map((position) => (
+              <option key={position} value={position}>
+                {position}
+              </option>
+            ))}
+          </select>
+
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-pivot-text">
+            ▼
+          </span>
+        </div>
 
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-white hover:bg-slate-800"
+            className="border-2 border-pivot-border bg-pivot-surface px-4 py-3 text-pivot-text transition-colors hover:bg-pivot-surface-2"
           >
             Clear Filters
           </button>
         )}
       </div>
 
-      <p className="mt-4 text-sm text-slate-400">
+      <p className="mt-5 text-sm font-medium text-pivot-muted">
         {sortedPlayers.length}{' '}
         {sortedPlayers.length === 1 ? 'player' : 'players'}
       </p>
@@ -233,9 +240,7 @@ function RankingsPage() {
         selectedPlayer={selectedPlayer}
         onPlayerClick={(player) =>
           setSelectedPlayer(
-            selectedPlayer?.rank === player.rank
-              ? null
-              : player
+            selectedPlayer?.rank === player.rank ? null : player
           )
         }
       />

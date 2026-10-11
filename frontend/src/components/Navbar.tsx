@@ -1,24 +1,36 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 function Navbar() {
+  const linkStyle = ({ isActive }: { isActive: boolean }) =>
+    `border-b-2 pb-1 text-xs font-bold uppercase tracking-[0.14em] transition-colors ${
+      isActive
+        ? 'border-pivot-border text-pivot-text'
+        : 'border-transparent text-pivot-muted hover:text-pivot-text'
+    }`
+
   return (
-    <nav className="flex items-center justify-between border-b border-slate-800 bg-slate-950 px-8 py-4 text-white">
-      <Link to="/" className="text-2xl font-bold">
-        PIVOT
-      </Link>
+    <nav className="border-b-2 border-pivot-border bg-pivot-bg px-8 py-5">
+      <div className="mx-auto flex max-w-7xl items-center justify-between">
+        <NavLink
+          to="/"
+          className="text-2xl font-black uppercase tracking-[-0.03em] text-pivot-text"
+        >
+          PIVOT
+        </NavLink>
 
-      <div className="flex gap-6 text-sm text-slate-300">
-        <Link to="/" className="hover:text-white">
-          Rankings
-        </Link>
+        <div className="flex gap-8">
+          <NavLink to="/" end className={linkStyle}>
+            Rankings
+          </NavLink>
 
-        <Link to="/about" className="hover:text-white">
-          About
-        </Link>
+          <NavLink to="/about" className={linkStyle}>
+            About
+          </NavLink>
 
-        <Link to="/methodology" className="hover:text-white">
-          Methodology
-        </Link>
+          <NavLink to="/methodology" className={linkStyle}>
+            Methodology
+          </NavLink>
+        </div>
       </div>
     </nav>
   )
