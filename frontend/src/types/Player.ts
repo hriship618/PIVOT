@@ -1,18 +1,13 @@
 export type Player = {
   rank: number
+  player_id: string
+
   name: string
-  team: string
-  position: string
-  score: number
+  team_id: string
 
-  pivotPercentile: number
-  offensivePercentile: number
-  defensivePercentile: number
+  matches: number
+  minutes_sampled: number
 
-  goals: number
-  assists: number
-  xG: number
-  xA: number
-  xT: number
-  minutes: number
+  spatial_value: number
+  prototype_pivot: number
 }
