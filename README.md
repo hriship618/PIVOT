@@ -91,3 +91,106 @@ Seven DFL matches are enough to demonstrate a leakage-safe, real-data end-to-end
 Tracking/event data: Deutsche Fußball Liga, DFL/IDSSE open data, CC BY 4.0. Dataset methodology: Bassek, Rein, Weber & Memmert (2025), DOI `10.1038/s41597-025-04505-y`.
 
 World Cup events and xG labels: StatsBomb Open Data. Published uses must identify StatsBomb as the source and follow the attribution requirements in the [official repository](https://github.com/hudl/open-data).
+# PIVOT
+
+**PIVOT** is a soccer player valuation system built to estimate how much a player contributes to expected goal differential through both on-ball and off-ball play.
+
+The project is inspired by impact metrics such as basketball EPM, but adapted to soccer, where substitutions are less frequent, possession is continuous, and much of a player's value comes from movement, spacing, defensive positioning, and actions that do not appear directly in box-score statistics.
+
+PIVOT combines tracking data, event data, expected-goals modeling, spatiotemporal neural networks, counterfactual attribution, and custom CUDA acceleration into a single player-value pipeline.
+
+---
+
+## Overview
+
+The core idea is to model the value of a soccer game state:
+
+\[
+V(S_t)
+=
+\mathbb{E}
+[
+\text{future xG for}
+-
+\text{future xG against}
+]
+\]
+
+Given a sequence of tracking frames, PIVOT estimates the expected goal-differential value of the current state.
+
+Player contributions can then be decomposed into:
+
+\[
+\text{PIVOT}_i
+=
+\text{Action xGD}_i
++
+\text{Spatial xGD}_i
++
+\text{Outcome xGD}_i
+\]
+
+where:
+
+- **Action xGD** measures changes in state value caused by actions such as passes, tackles, shots, interceptions, and restarts.
+- **Spatial xGD** estimates the value of a player's positioning and movement using counterfactual state evaluation.
+- **Outcome xGD** captures execution relative to expectation, such as finishing above or below xG.
+
+Final values are intended to be expressed as expected goal differential added per 90 minutes.
+
+---
+
+## Architecture
+
+PIVOT uses a spatiotemporal neural network designed around the structure of soccer tracking data.
+
+For each frame, the model receives:
+
+- 11 focal-team players
+- 11 opposing players
+- player positions and velocities
+- ball position and velocity
+- possession state
+- score differential
+- match time
+- ball-in-play state
+- player-count differential
+
+The model first constructs pairwise player relations such as:
+
+- relative position
+- distance
+- relative velocity
+- closing speed
+
+These relations are used inside relation-aware multi-head attention layers.
+
+The frame representation is then passed through a temporal model to capture movement over time.
+
+```text
+Tracking sequence
+      |
+      v
+Player state encoding
+      |
+      v
+Pairwise spatial relations
+      |
+      v
+Relation-aware attention
+      |
+      v
+Team aggregation
+      |
+      +---- Ball encoding
+      |
+      +---- Match context
+      |
+      v
+Frame representation
+      |
+      v
+Temporal GRU
+      |
+      v
+State value V(S_t)
