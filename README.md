@@ -1,93 +1,223 @@
-# PIVOT — Player Impact via Outcomes and Tracking
+# PIVOT
 
-> The active cleanup-only implementation is documented in `models/README.md`.
-> The research design below is retained as future-methodology documentation and
-> is not the current executable pipeline.
+**PIVOT** is a soccer player-value framework built to estimate how much a player changes expected goal differential through both on-ball actions and off-ball positioning.
 
-PIVOT is a real-data soccer player rating that combines a transferable event-value model with synchronized tracking counterfactuals. The production rankings use 64 FIFA World Cup 2022 matches from StatsBomb Open Data and seven DFL/IDSSE matches with continuous tracking. Synthetic data is restricted to tests and never enters the dashboard artifact.
+The long-term goal is to build a soccer analogue of basketball metrics such as EPM: a single player-value estimate grounded in changes to expected scoring margin rather than raw box-score statistics.
 
-## One-command pipeline
+This repository contains the current research/prototype implementation, including:
 
-```bash
-python -m pip install -e ./models
-python -m models.scripts.run_pivot
-```
+- event and tracking-data ingestion
+- a portable expected-goals model
+- spatiotemporal state-value modeling
+- action-level expected goal differential attribution
+- off-ball counterfactual attribution
+- GPU training support
+- a custom CUDA extension for pairwise spatial features
+- a frontend for exploring prototype player rankings
 
-That command:
+> **Status:** research prototype. Current rankings are based on a small tracking-data sample and should not be interpreted as production-quality player evaluations.
 
-1. chronologically splits the 64 World Cup matches into 38 train, 13 validation and 13 test matches;
-2. fits scoring, conceding, shot-xG and xT models using only the training partition;
-3. maps DFL actions into the same provider-neutral action representation;
-4. aligns those actions to real DFL tracking frames and computes 32 × 21 pitch control plus every active player's leave-one-out counterfactual;
-5. cross-fits the event/tracking fusion over seven leave-one-match-out DFL folds;
-6. evaluates the held-out probabilities and simple player/team baselines;
-7. writes real player-event contributions and final rankings under `models/data/processed/pivot/`;
-8. regenerates `frontend/app/pivot-rankings.generated.ts`, the dashboard's only rating source.
+---
 
-Raw data is expected under `models/data/raw/statsbomb/` and `models/data/raw/dfl/`. Both raw and large processed artifacts are ignored by Git.
+## Motivation
 
-## Repository layout
+Traditional soccer statistics capture only fragments of player value.
+
+Goals and assists miss buildup and defending. Event-based expected-value models improve on this, but still struggle with actions away from the ball. Tracking data provides much richer information: player positioning, defensive shape, runs, spacing, pressure, and movement.
+
+PIVOT models the game as a sequence of states and asks:
+
+> **How does the expected goal differential change because of a player's actions and positioning?**
+
+The current decomposition is:
+
+\[
+\text{PIVOT}_i =
+\text{Action xGD}_i +
+\text{Spatial xGD}_i +
+\text{Outcome residual}_i
+\]
+
+where:
+
+- **Action xGD** captures changes associated with passes, tackles, shots, restarts, and other events.
+- **Spatial xGD** captures off-ball value using counterfactual player positioning.
+- **Outcome residual** captures finishing or goalkeeping performance beyond expected outcomes.
+
+Player contributions can then be standardized per 90 minutes.
+
+---
+
+## Model Overview
+
+### 1. Expected Goals
+
+PIVOT first trains a portable expected-goals model using StatsBomb event data.
+
+The current model uses shot geometry features including:
+
+- shot location
+- distance to goal
+- shot angle
+- penalty indicator
+
+The model is trained against StatsBomb xG values and is then used to assign a common xG scale to tracking datasets that do not provide the same shot-quality model.
+
+---
+
+### 2. State Representation
+
+A match state contains:
+
+- 11 focal-team players
+- 11 opponent players
+- ball position and velocity
+- player position and velocity
+- possession
+- score differential
+- match time
+- ball-in-play state
+- manpower differential
+
+All states are normalized so that the focal team attacks from left to right.
+
+Rather than modeling isolated frames, PIVOT uses short tracking sequences so the model can reason about motion and developing play.
+
+---
+
+### 3. Spatiotemporal State-Value Model
+
+The state-value model estimates:
+
+\[
+V(S_t)
+\approx
+\mathbb{E}
+\left[
+\text{future xG for}
+-
+\text{future xG against}
+\right]
+\]
+
+over a short future window.
+
+The architecture combines:
+
+#### Relation-aware player attention
+
+For every ordered player pair \(i,j\), PIVOT computes:
+
+\[
+(\Delta x,\Delta y,d,\Delta v_x,\Delta v_y,c)
+\]
+
+where \(c\) represents closing speed.
+
+These pairwise relations are passed into a relation network that produces attention biases for multi-head player interaction layers.
+
+#### Team pooling
+
+After spatial interaction, representations are pooled separately for:
+
+- the focal team
+- the opponent
+
+This preserves the distinction between attacking and defending structure.
+
+#### Ball and match context
+
+Separate encoders process:
+
+- ball state
+- possession
+- score
+- time
+- ball-in-play status
+- manpower differential
+
+#### Temporal modeling
+
+Frame-level representations are passed through a multi-layer GRU to model how the state evolves over time.
+
+The final temporal representation is mapped to predicted expected goal differential.
+
+---
+
+## Action Attribution
+
+For ordinary actions, the current framework measures the local change in state value:
+
+\[
+\Delta V =
+V(S_{\text{after}})
+-
+V(S_{\text{before}})
+\]
+
+This allows identical actions to receive different values depending on context.
+
+For example, a tackle near one's own goal can be substantially more valuable than the same tackle in a harmless midfield state.
+
+### Shots
+
+Shot value is separated into two components.
+
+#### Shot decision
+
+\[
+\text{Shot Decision Value}
+=
+xG -
+V(S_{\text{pre-shot}})
+\]
+
+#### Finishing
+
+\[
+\text{Finishing Value}
+=
+\text{Goal} - xG
+\]
+
+This prevents the shooter from receiving all of the credit for chance creation while still rewarding finishing performance.
+
+For goalkeepers, the corresponding shot-stopping residual is:
+
+\[
+xG - \text{Goal}
+\]
+
+### Restarts and cards
+
+Special transitions such as:
+
+- free kicks
+- corners
+- penalties
+- red cards
+
+are handled through explicit state transitions rather than being treated as ordinary open-play events.
+
+---
+
+## Off-Ball Attribution
+
+Tracking data makes it possible to evaluate value that never appears in event logs.
+
+For a focal player, PIVOT constructs a counterfactual state in which that player's trajectory is replaced by a baseline trajectory derived from teammates.
+
+The difference between the original and counterfactual state values provides an estimate of the player's spatial contribution.
+
+This is currently a prototype attribution method. More sophisticated role- and context-conditioned counterfactuals are a natural extension.
+
+---
+
+## CUDA Extension
+
+PIVOT includes a custom CUDA kernel for computing pairwise player-relation features.
+
+For a batch of player states with shape:
 
 ```text
-frontend/  Web application and generated ranking source
-backend/   Reserved for the future model-serving API
-models/    Python package, data, configuration, scripts, tests, and research docs
-cuda/      CuPy adapter and CUDA pitch-control kernel
-```
-
-## Mathematical definition
-
-For DFL event `e`, the frozen World Cup model supplies the actor-oriented net event change
-
-```text
-EV_e = [P_WC(score | post_e) - P_WC(concede | post_e)]
-     - [P_WC(score | pre_e)  - P_WC(concede | pre_e)].
-```
-
-Two logistic fusion models are fitted on six DFL matches at a time from the World Cup probability logit and actor-oriented, xT-weighted pitch-control advantage. Removing player `i` from the synchronized frame changes that fused net outcome probability by `SCF_i,e`, oriented so a useful attacking or defensive presence is positive. The player-event contribution is
-
-```text
-C_i,e = 1[i performed e] * EV_e + SCF_i,e.
-```
-
-Displayed match contributions are always produced by the fold that held that match out. The raw PIVOT rate remains contribution per 100 active event samples, but reliability does not treat those correlated frames as independent. Define `effective_matches = min(matches, minutes/90)` and `reliability = effective_matches/(effective_matches+4)`. A full single match therefore has reliability `0.20` regardless of frame count; five full matches reach only `0.556`. The rating uses the unshrunk group spread as its fixed scale so post-shrink standardization cannot restore discarded variance. Goalkeepers and outfield players have separate reference distributions and rankings. Qualification requires at least 45 tracked minutes.
-
-## Event model
-
-The target is whether the reference team scores or concedes within the next 10 actions. The current action is excluded, histories and labels never cross period boundaries, incomplete period-end windows are censored, and shootouts are removed. Features are the current action and two prior same-period actions: type, start/end coordinates, displacement, success, team relation, shot geometry, period, clock and score difference.
-
-World Cup event files are never assigned tracking features. A separate World Cup shot-geometry model transfers StatsBomb xG to DFL shots for the xT comparison without fabricating provider xG.
-
-## Tracking model
-
-DFL tracking supplies position and velocity at the event time. PIVOT computes reaction-adjusted time-to-intercept control on a 32 × 21 grid, collapses it to 12 tactical zones, weights those zones with the World Cup-trained xT surface, and calculates the exact control change when each active player is removed. These are the only tracking-derived production features.
-
-## Dashboard
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The UI contains separate compact outfield and goalkeeper tables showing only rank, player, team, matches, minutes and PIVOT rating. It contains no placeholder cards, synthetic ratings or generated methodology prose.
-
-## Validation and limitations
-
-Run software checks with:
-
-```bash
-python -m pytest -q models/tests
-python -m compileall -q models/zcpv models/scripts cuda
-cd frontend
-npx tsc --noEmit
-npm run build
-```
-
-Seven DFL matches are enough to demonstrate a leakage-safe, real-data end-to-end estimator, but not enough for a season-quality talent claim. World Cup-to-Bundesliga transfer can have competition/provider shift; pitch-control physics are assumptions; DFL outcomes are sparse; and the standardized rating is local to this player pool. The held-out ablation does not show a consistent predictive improvement from adding pitch control, so PIVOT treats it as attribution evidence rather than claiming superior prediction. Exact metrics and every fold coefficient are recorded in `pivot-report.json`.
-
-## Data attribution
-
-Tracking/event data: Deutsche Fußball Liga, DFL/IDSSE open data, CC BY 4.0. Dataset methodology: Bassek, Rein, Weber & Memmert (2025), DOI `10.1038/s41597-025-04505-y`.
-
-World Cup events and xG labels: StatsBomb Open Data. Published uses must identify StatsBomb as the source and follow the attribution requirements in the [official repository](https://github.com/hudl/open-data).
+[B, N, 4]

@@ -8,13 +8,35 @@ from pathlib import Path
 
 import torch
 
-from pivot.attribution import player_counterfactual_value
-from pivot.data import BallState, FrameState, PlayerState, load_tracking_frames
+from pivot.accounting import (
+    ActionEvent,
+    ActionType,
+)
+from pivot.attribution import (
+    attribute_action_event,
+    player_counterfactual_value,
+)
+from pivot.data import (
+    BallState,
+    FrameState,
+    PlayerState,
+    load_dfl_action_events,
+    load_tracking_frames,
+)
 from pivot.model import StateValueModel
-from pivot.state import encode_state, orient_frame, players_in_encoding_order
-from pivot.xg import XGModel, predict_xg
-from scripts.build_rankings import RANKING_FIELDS, export_rankings
-
+from pivot.state import (
+    encode_state,
+    orient_frame,
+    players_in_encoding_order,
+)
+from pivot.xg import (
+    XGModel,
+    predict_xg,
+)
+from scripts.build_rankings import (
+    RANKING_FIELDS,
+    export_rankings,
+)
 
 MODELS_DIR = Path(__file__).resolve().parents[1]
 
@@ -112,26 +134,42 @@ def test_state_encoding_dimensions_and_player_order() -> None:
     assert focal.shape == (11, 4)
     assert opponents.shape == (11, 4)
     assert ball.shape == (4,)
-    assert context.shape == (3,)
+    assert context.shape == (5,)
     assert [player.player_id for player in ordered_players] == [f"home-{i}" for i in range(11)]
     assert torch.isclose(focal[3, 0], torch.tensor(ordered_players[3].x / 105.0))
 
-
-def test_checkpoint_compatible_inference_outputs() -> None:
+def test_inference_outputs() -> None:
     xg_model = XGModel()
     xg_checkpoint = MODELS_DIR / "data" / "processed" / "xg" / "best_model.pt"
+
     if xg_checkpoint.exists():
-        xg_model.load_state_dict(torch.load(xg_checkpoint, map_location="cpu"))
-    probability = predict_xg(xg_model, x=90.0, y=34.0, penalty=False)
+        xg_model.load_state_dict(
+            torch.load(xg_checkpoint, map_location="cpu")
+        )
+
+    probability = predict_xg(
+        xg_model,
+        x=90.0,
+        y=34.0,
+        penalty=False,
+    )
+
     assert 0.0 <= probability <= 1.0
 
+    # The PIVOT architecture is intentionally not compatible with the old
+    # prototype checkpoint. This test verifies the new model's forward pass.
     state_model = StateValueModel()
-    state_checkpoint = MODELS_DIR / "data" / "processed" / "state_value" / "full_model.pt"
-    if state_checkpoint.exists():
-        state_model.load_state_dict(torch.load(state_checkpoint, map_location="cpu"))
-    encoded = encode_state(_frame(), "home", True)
-    assert state_model(*encoded).ndim == 0
 
+    encoded = encode_state(
+        _frame(),
+        "home",
+        True,
+    )
+
+    value = state_model(*encoded)
+
+    assert value.ndim == 0
+    assert torch.isfinite(value)
 
 def test_counterfactual_does_not_mutate_state() -> None:
     model = StateValueModel()
@@ -159,3 +197,137 @@ def test_rankings_export_frontend_schema(tmp_path: Path) -> None:
     with csv_path.open(newline="", encoding="utf-8") as file:
         assert set(next(csv.DictReader(file))) == set(RANKING_FIELDS)
 
+def test_temporal_counterfactual_runs() -> None:
+    model = StateValueModel()
+
+    frame = _frame()
+
+    sequence = [
+        encode_state(frame, "home", True)
+        for _ in range(10)
+    ]
+
+    focal = torch.stack([item[0] for item in sequence])
+    opponents = torch.stack([item[1] for item in sequence])
+    ball = torch.stack([item[2] for item in sequence])
+    context = torch.stack([item[3] for item in sequence])
+
+    original = focal.clone()
+
+    value = player_counterfactual_value(
+        model,
+        focal,
+        opponents,
+        ball,
+        context,
+        3,
+    )
+
+    assert isinstance(value, float)
+    assert torch.equal(focal, original)
+
+def test_action_event_normalization(tmp_path: Path) -> None:
+    _write_minimal_dfl_match(tmp_path)
+
+    events_path = tmp_path / "events.xml"
+
+    events_path.write_text(
+        """
+<Root>
+    <Event EventId="kickoff" EventTime="2024-01-01T12:00:00">
+        <KickOff
+            GameSection="firstHalf"
+            TeamLeft="home"
+            TeamRight="away"
+        />
+    </Event>
+
+    <Event
+        EventId="tackle-1"
+        EventTime="2024-01-01T12:00:05"
+        X-Source-Position="50"
+        Y-Source-Position="30"
+    >
+        <TacklingGame
+            Team="home"
+            Player="h4"
+            Successful="1"
+        />
+    </Event>
+
+    <Event
+        EventId="foul-1"
+        EventTime="2024-01-01T12:00:10"
+        X-Source-Position="85"
+        Y-Source-Position="34"
+    >
+        <Foul
+            Team="away"
+            Player="a3"
+        />
+    </Event>
+
+    <Event
+        EventId="shot-1"
+        EventTime="2024-01-01T12:00:12"
+        X-Source-Position="95"
+        Y-Source-Position="34"
+    >
+        <ShotAtGoal
+            Team="home"
+            Player="h9"
+        />
+        <SuccessfulShot />
+    </Event>
+</Root>
+""".strip(),
+        encoding="utf-8",
+    )
+
+    actions = load_dfl_action_events(tmp_path)
+
+    assert len(actions) == 3
+
+    assert actions[0].event_type == ActionType.TACKLE
+    assert actions[0].player_id == "h4"
+    assert actions[0].successful is True
+
+    assert actions[1].event_type == ActionType.FOUL_CONCEDED
+    assert actions[1].player_id == "a3"
+
+    assert actions[2].event_type == ActionType.SHOT
+    assert actions[2].player_id == "h9"
+    assert actions[2].goal is True
+
+    assert actions[0].provider_event_id == "tackle-1"
+
+
+def test_action_attribution_runs() -> None:
+    model = StateValueModel()
+
+    frames = []
+
+    for index in range(20):
+        frame = _frame()
+        frame.timestamp = index * 0.2
+        frames.append(frame)
+
+    event = ActionEvent(
+        match_id="match",
+        period=1,
+        timestamp=2.2,
+        event_type=ActionType.TACKLE,
+        team_id="home",
+        player_id="home-3",
+    )
+
+    credit = attribute_action_event(
+        model=model,
+        event=event,
+        frames=frames,
+        attacking_right=True,
+    )
+
+    assert credit is not None
+    assert isinstance(credit.action_xgd, float)
+    assert credit.event.player_id == "home-3"
