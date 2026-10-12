@@ -23,7 +23,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
-
 class ActionType(StrEnum):
     PASS = "pass"
     CROSS = "cross"
@@ -44,19 +43,19 @@ class ActionType(StrEnum):
     PENALTY_CONCEDED = "penalty_conceded"
 
     SHOT = "shot"
+
+    YELLOW_CARD = "yellow_card"
     RED_CARD = "red_card"
 
     OTHER = "other"
 
-
 @dataclass(frozen=True)
 class ActionEvent:
-    """Provider-neutral football event used by the PIVOT accounting layer."""
+    """Provider-neutral event consumed by PIVOT's accounting layer."""
 
     match_id: str
     period: int
     timestamp: float
-
     event_type: ActionType
 
     team_id: str | None
@@ -70,13 +69,13 @@ class ActionEvent:
 
     successful: bool | None = None
 
-    # Shot information.
     xg: float | None = None
     goal: bool | None = None
 
-    # Used for cards/restarts/provider-specific context.
     qualifier: str | None = None
 
+    # Kept so events can later be deduplicated or linked to provider metadata.
+    provider_event_id: str | None = None
 
 @dataclass
 class PlayerContribution:

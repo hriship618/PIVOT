@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from typing import Callable
-
+from pivot.accounting import ActionEvent, ActionType
 
 PITCH_LENGTH = 105.0
 PITCH_WIDTH = 68.0
@@ -521,3 +521,586 @@ def score_at_time(
             away_score += 1
     return home_score, away_score
 
+# ---------------------------------------------------------------------------
+# Provider-neutral DFL action events
+# ---------------------------------------------------------------------------
+
+
+def _first_attribute(
+    nodes: list[ET.Element],
+    names: tuple[str, ...],
+) -> str | None:
+    """Return the first matching XML attribute from a group of nodes."""
+
+    for node in nodes:
+        for name in names:
+            value = node.get(name)
+
+            if value not in (None, ""):
+                return value
+
+    return None
+
+
+def _optional_float(
+    value: str | None,
+) -> float | None:
+    if value is None:
+        return None
+
+    try:
+        return float(value)
+
+    except ValueError:
+        return None
+
+
+def _xml_boolean(
+    value: str | None,
+) -> bool | None:
+    """Interpret common provider boolean encodings."""
+
+    if value is None:
+        return None
+
+    normalized = value.strip().lower()
+
+    if normalized in {
+        "1",
+        "true",
+        "yes",
+        "successful",
+        "success",
+    }:
+        return True
+
+    if normalized in {
+        "0",
+        "false",
+        "no",
+        "unsuccessful",
+        "failed",
+        "failure",
+    }:
+        return False
+
+    return None
+
+
+def _event_actor(
+    event: ET.Element,
+    action_node: ET.Element,
+) -> tuple[
+    str | None,
+    str | None,
+]:
+    """Extract team/player IDs without tying the model to one XML spelling."""
+
+    nodes = [
+        action_node,
+        event,
+    ]
+
+    team_id = _first_attribute(
+        nodes,
+        (
+            "Team",
+            "TeamId",
+            "TeamID",
+        ),
+    )
+
+    player_id = _first_attribute(
+        nodes,
+        (
+            "Player",
+            "PlayerId",
+            "PlayerID",
+            "PersonId",
+            "PersonID",
+        ),
+    )
+
+    return team_id, player_id
+
+
+def _event_opponent(
+    event: ET.Element,
+    action_node: ET.Element,
+) -> tuple[
+    str | None,
+    str | None,
+]:
+    """Extract an explicitly named opposing team/player when available."""
+
+    nodes = [
+        action_node,
+        event,
+    ]
+
+    opponent_team = _first_attribute(
+        nodes,
+        (
+            "OpponentTeam",
+            "OpponentTeamId",
+            "OpponentTeamID",
+        ),
+    )
+
+    opponent_player = _first_attribute(
+        nodes,
+        (
+            "Opponent",
+            "OpponentPlayer",
+            "OpponentPlayerId",
+            "OpponentPlayerID",
+        ),
+    )
+
+    return (
+        opponent_team,
+        opponent_player,
+    )
+
+
+def _event_location(
+    event: ET.Element,
+    action_node: ET.Element,
+) -> tuple[
+    float | None,
+    float | None,
+]:
+    """Read the event origin on the physical pitch when provided."""
+
+    x = _first_attribute(
+        [action_node, event],
+        (
+            "X-Source-Position",
+            "X",
+            "PosX",
+        ),
+    )
+
+    y = _first_attribute(
+        [action_node, event],
+        (
+            "Y-Source-Position",
+            "Y",
+            "PosY",
+        ),
+    )
+
+    return (
+        _optional_float(x),
+        _optional_float(y),
+    )
+
+
+def _card_type(
+    node: ET.Element,
+) -> ActionType:
+    """Interpret card events conservatively."""
+
+    text = " ".join(
+        str(value).lower()
+        for value in node.attrib.values()
+    )
+
+    tag = node.tag.lower()
+
+    if (
+        "red" in text
+        or "dismiss" in text
+        or "sendingoff" in tag
+        or "redcard" in tag
+    ):
+        return ActionType.RED_CARD
+
+    return ActionType.YELLOW_CARD
+
+
+def _classify_dfl_event(
+    event: ET.Element,
+) -> tuple[
+    ActionType,
+    ET.Element,
+] | None:
+    """Find the principal football action represented by one provider event.
+
+    Order matters. A penalty shot, for example, is a SHOT rather than a second
+    penalty-award event if the provider includes both ShotAtGoal and Penalty
+    descendants.
+    """
+
+    nodes = list(
+        event.iter()
+    )
+
+    tags = {
+        node.tag: node
+        for node in nodes
+    }
+
+    # Most specific events first.
+    if "ShotAtGoal" in tags:
+        return (
+            ActionType.SHOT,
+            tags["ShotAtGoal"],
+        )
+
+    for tag in (
+        "RedCard",
+        "SendingOff",
+    ):
+        if tag in tags:
+            return (
+                ActionType.RED_CARD,
+                tags[tag],
+            )
+
+    if "Caution" in tags:
+        return (
+            _card_type(tags["Caution"]),
+            tags["Caution"],
+        )
+
+    if "Penalty" in tags:
+        return (
+            ActionType.PENALTY_WON,
+            tags["Penalty"],
+        )
+
+    if "CornerKick" in tags:
+        return (
+            ActionType.CORNER_WON,
+            tags["CornerKick"],
+        )
+
+    if "FreeKick" in tags:
+        return (
+            ActionType.FREE_KICK_WON,
+            tags["FreeKick"],
+        )
+
+    if "Foul" in tags:
+        return (
+            ActionType.FOUL_CONCEDED,
+            tags["Foul"],
+        )
+
+    for tag in (
+        "Interception",
+        "InterceptBall",
+    ):
+        if tag in tags:
+            return (
+                ActionType.INTERCEPTION,
+                tags[tag],
+            )
+
+    if "TacklingGame" in tags:
+        return (
+            ActionType.TACKLE,
+            tags["TacklingGame"],
+        )
+
+    if "Clearance" in tags:
+        return (
+            ActionType.CLEARANCE,
+            tags["Clearance"],
+        )
+
+    if "Cross" in tags:
+        return (
+            ActionType.CROSS,
+            tags["Cross"],
+        )
+
+    if "Pass" in tags:
+        return (
+            ActionType.PASS,
+            tags["Pass"],
+        )
+
+    # Some providers express ordinary ball actions under a generic Play node.
+    if "Play" in tags:
+        return (
+            ActionType.OTHER,
+            tags["Play"],
+        )
+
+    return None
+
+
+def load_dfl_action_events(
+    match_dir: str | Path,
+    predict_xg: Callable[
+        [float, float, bool],
+        float,
+    ] | None = None,
+) -> list[ActionEvent]:
+    """Normalize DFL event XML into provider-neutral PIVOT actions.
+
+    Parsing is deliberately conservative: when the provider does not explicitly
+    identify a beneficiary/player, that information remains None rather than
+    being guessed.
+
+    Carries and continuous off-ball movement are not fabricated here; those are
+    derived from tracking rather than event labels.
+    """
+
+    match_dir = Path(
+        match_dir
+    )
+
+    metadata = load_metadata(
+        match_dir
+    )
+
+    period_starts = load_period_starts(
+        match_dir
+    )
+
+    directions = load_attacking_directions(
+        match_dir
+    )
+
+    root = ET.parse(
+        match_dir / "events.xml"
+    ).getroot()
+
+    result: list[ActionEvent] = []
+
+    for event in root.findall(
+        "Event"
+    ):
+        event_time = _parse_time(
+            event.get("EventTime")
+        )
+
+        if event_time is None:
+            continue
+
+        period_info = _event_period_and_time(
+            event_time,
+            period_starts,
+        )
+
+        if period_info is None:
+            continue
+
+        period, timestamp = period_info
+
+        classified = _classify_dfl_event(
+            event
+        )
+
+        if classified is None:
+            continue
+
+        event_type, action_node = classified
+
+        team_id, player_id = _event_actor(
+            event,
+            action_node,
+        )
+
+        opponent_team, opponent_player = _event_opponent(
+            event,
+            action_node,
+        )
+
+        x, y = _event_location(
+            event,
+            action_node,
+        )
+
+        success = _xml_boolean(
+            _first_attribute(
+                [
+                    action_node,
+                    event,
+                ],
+                (
+                    "Successful",
+                    "Success",
+                    "Outcome",
+                ),
+            )
+        )
+
+        goal: bool | None = None
+        xg: float | None = None
+
+        if event_type == ActionType.SHOT:
+            goal = (
+                _descendant(
+                    event,
+                    "SuccessfulShot",
+                )
+                is not None
+            )
+
+            penalty = (
+                _descendant(
+                    event,
+                    "Penalty",
+                )
+                is not None
+            )
+
+            # xG expects the shooting team to attack left-to-right.
+            if (
+                x is not None
+                and y is not None
+                and team_id is not None
+                and not directions.get(
+                    (
+                        team_id,
+                        period,
+                    ),
+                    True,
+                )
+            ):
+                x = (
+                    metadata["pitch_length"]
+                    - x
+                )
+
+                y = (
+                    metadata["pitch_width"]
+                    - y
+                )
+
+            if (
+                predict_xg is not None
+                and x is not None
+                and y is not None
+            ):
+                xg = predict_xg(
+                    x,
+                    y,
+                    penalty,
+                )
+
+        result.append(
+            ActionEvent(
+                match_id=metadata[
+                    "match_id"
+                ],
+                period=period,
+                timestamp=timestamp,
+                event_type=event_type,
+                team_id=team_id,
+                player_id=player_id,
+                x=x,
+                y=y,
+                opponent_team_id=opponent_team,
+                opponent_player_id=opponent_player,
+                successful=success,
+                xg=xg,
+                goal=goal,
+                qualifier=action_node.tag,
+                provider_event_id=event.get(
+                    "EventId"
+                )
+                or event.get(
+                    "EventID"
+                )
+                or event.get(
+                    "Id"
+                ),
+            )
+        )
+
+    result.sort(
+        key=lambda action: (
+            action.period,
+            action.timestamp,
+        )
+    )
+
+    return result
+
+def test_action_event_normalization(
+    tmp_path: Path,
+) -> None:
+    _write_minimal_dfl_match(
+        tmp_path
+    )
+
+    events_path = (
+        tmp_path / "events.xml"
+    )
+
+    events_path.write_text(
+        """
+<Root>
+    <Event EventId="kickoff" EventTime="2024-01-01T12:00:00">
+        <KickOff
+            GameSection="firstHalf"
+            TeamLeft="home"
+            TeamRight="away"
+        />
+    </Event>
+
+    <Event
+        EventId="tackle-1"
+        EventTime="2024-01-01T12:00:05"
+        X-Source-Position="50"
+        Y-Source-Position="30"
+    >
+        <TacklingGame
+            Team="home"
+            Player="h4"
+            Successful="1"
+        />
+    </Event>
+
+    <Event
+        EventId="foul-1"
+        EventTime="2024-01-01T12:00:10"
+        X-Source-Position="85"
+        Y-Source-Position="34"
+    >
+        <Foul
+            Team="away"
+            Player="a3"
+        />
+    </Event>
+
+    <Event
+        EventId="shot-1"
+        EventTime="2024-01-01T12:00:12"
+        X-Source-Position="95"
+        Y-Source-Position="34"
+    >
+        <ShotAtGoal
+            Team="home"
+            Player="h9"
+        />
+        <SuccessfulShot />
+    </Event>
+</Root>
+""".strip(),
+        encoding="utf-8",
+    )
+
+    actions = load_dfl_action_events(
+        tmp_path
+    )
+
+    assert len(actions) == 3
+
+    assert actions[0].event_type == ActionType.TACKLE
+    assert actions[0].player_id == "h4"
+    assert actions[0].successful is True
+
+    assert actions[1].event_type == ActionType.FOUL_CONCEDED
+    assert actions[1].player_id == "a3"
+
+    assert actions[2].event_type == ActionType.SHOT
+    assert actions[2].player_id == "h9"
+    assert actions[2].goal is True
+
+    assert actions[0].provider_event_id == "tackle-1"
