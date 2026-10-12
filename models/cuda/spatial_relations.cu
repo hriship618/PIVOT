@@ -1,32 +1,16 @@
 #include <torch/extension.h>
+#include <ATen/cuda/CUDAContext.h>
+#include <c10/cuda/CUDAStream.h>
+
 #include <cuda.h>
 #include <cuda_runtime.h>
 
 #include <cmath>
 
+namespace {
 
-// Each CUDA thread handles one directed player pair:
-//
-//     (batch, player_i, player_j)
-//
-// and writes the six relationship features:
-//
-//     dx
-//     dy
-//     distance
-//     relative vx
-//     relative vy
-//     closing speed
-//
-// Input:
-//     players [B, N, 4]
-//
-// Output:
-//     relations [B, N, N, 6]
-//
-// Player features are:
-//
-//     x, y, vx, vy
+constexpr int kNumPlayerFeatures = 4;
+constexpr int kNumRelationFeatures = 6;
 
 __global__ void spatial_relations_kernel(
     const float* __restrict__ players,
@@ -34,203 +18,121 @@ __global__ void spatial_relations_kernel(
     int batch_size,
     int num_players
 ) {
-    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    const int64_t total_pairs =
+        static_cast<int64_t>(batch_size) *
+        num_players *
+        num_players;
 
-    int pairs_per_batch = num_players * num_players;
-    int total_pairs = batch_size * pairs_per_batch;
+    const int64_t index =
+        static_cast<int64_t>(blockIdx.x) * blockDim.x + threadIdx.x;
 
     if (index >= total_pairs) {
         return;
     }
 
-    // Convert flat thread index into:
-    //
-    //     batch
-    //     source player i
-    //     destination player j
+    // Flattened layout:
+    // index = ((b * N) + i) * N + j
+    const int j = index % num_players;
+    const int64_t temp = index / num_players;
+    const int i = temp % num_players;
+    const int b = temp / num_players;
 
-    int batch = index / pairs_per_batch;
-    int pair_index = index % pairs_per_batch;
+    const int64_t i_offset =
+        (static_cast<int64_t>(b) * num_players + i) * kNumPlayerFeatures;
 
-    int i = pair_index / num_players;
-    int j = pair_index % num_players;
+    const int64_t j_offset =
+        (static_cast<int64_t>(b) * num_players + j) * kNumPlayerFeatures;
 
+    const float xi  = players[i_offset + 0];
+    const float yi  = players[i_offset + 1];
+    const float vxi = players[i_offset + 2];
+    const float vyi = players[i_offset + 3];
 
-    // players is laid out:
-    //
-    // [batch][player][feature]
-    //
-    // with four features per player.
+    const float xj  = players[j_offset + 0];
+    const float yj  = players[j_offset + 1];
+    const float vxj = players[j_offset + 2];
+    const float vyj = players[j_offset + 3];
 
-    int i_offset = (
-        batch * num_players * 4
-        + i * 4
-    );
+    // Player j relative to player i.
+    const float dx = xj - xi;
+    const float dy = yj - yi;
 
-    int j_offset = (
-        batch * num_players * 4
-        + j * 4
-    );
+    const float dvx = vxj - vxi;
+    const float dvy = vyj - vyi;
 
+    const float distance_sq = dx * dx + dy * dy;
+    const float distance = sqrtf(distance_sq + 1e-8f);
 
-    float xi = players[i_offset + 0];
-    float yi = players[i_offset + 1];
-    float vxi = players[i_offset + 2];
-    float vyi = players[i_offset + 3];
+    const float inv_distance = 1.0f / distance;
+    const float unit_dx = dx * inv_distance;
+    const float unit_dy = dy * inv_distance;
 
-    float xj = players[j_offset + 0];
-    float yj = players[j_offset + 1];
-    float vxj = players[j_offset + 2];
-    float vyj = players[j_offset + 3];
+    // Positive when the players are moving toward one another.
+    const float closing_speed =
+        -(dvx * unit_dx + dvy * unit_dy);
 
+    const int64_t out_offset = index * kNumRelationFeatures;
 
-    // Relation i -> j means:
-    //
-    // where is j relative to i?
-
-    float dx = xj - xi;
-    float dy = yj - yi;
-
-    float dvx = vxj - vxi;
-    float dvy = vyj - vyi;
-
-
-    // Small epsilon matches the PyTorch reference implementation and avoids
-    // division by zero for self-edges i == j.
-
-    float distance = sqrtf(
-        dx * dx
-        + dy * dy
-        + 1e-8f
-    );
-
-
-    float unit_dx = dx / distance;
-    float unit_dy = dy / distance;
-
-
-    // Positive closing speed means the players are moving toward each other.
-    //
-    // Relative velocity projected onto the line joining the players:
-    //
-    //     dv dot unit_direction
-    //
-    // is negative when separation is decreasing, hence the minus sign.
-
-    float closing_speed = -(
-        dvx * unit_dx
-        + dvy * unit_dy
-    );
-
-
-    // Output layout:
-    //
-    // [B, N, N, 6]
-
-    int output_offset = (
-        (
-            batch * num_players * num_players
-            + i * num_players
-            + j
-        )
-        * 6
-    );
-
-
-    output[output_offset + 0] = dx;
-    output[output_offset + 1] = dy;
-    output[output_offset + 2] = distance;
-    output[output_offset + 3] = dvx;
-    output[output_offset + 4] = dvy;
-    output[output_offset + 5] = closing_speed;
+    output[out_offset + 0] = dx;
+    output[out_offset + 1] = dy;
+    output[out_offset + 2] = distance;
+    output[out_offset + 3] = dvx;
+    output[out_offset + 4] = dvy;
+    output[out_offset + 5] = closing_speed;
 }
 
+}  // namespace
 
-torch::Tensor spatial_relations_cuda(
-    torch::Tensor players
-) {
-    TORCH_CHECK(
-        players.is_cuda(),
-        "players must be a CUDA tensor"
-    );
 
+torch::Tensor spatial_relations_cuda(torch::Tensor players) {
+    TORCH_CHECK(players.is_cuda(), "players must be a CUDA tensor");
     TORCH_CHECK(
         players.scalar_type() == torch::kFloat32,
-        "players must currently be float32"
+        "players must have dtype float32"
     );
-
+    TORCH_CHECK(players.dim() == 3, "players must have shape [B, N, 4]");
     TORCH_CHECK(
-        players.dim() == 3,
-        "players must have shape [B, N, 4]"
+        players.size(2) == kNumPlayerFeatures,
+        "last dimension must have size 4"
     );
+    TORCH_CHECK(players.is_contiguous(), "players must be contiguous");
 
-    TORCH_CHECK(
-        players.size(2) == 4,
-        "last player dimension must be 4"
-    );
-
-    TORCH_CHECK(
-        players.is_contiguous(),
-        "players must be contiguous"
-    );
-
-
-    int batch_size = players.size(0);
-    int num_players = players.size(1);
-
+    const int batch_size = static_cast<int>(players.size(0));
+    const int num_players = static_cast<int>(players.size(1));
 
     auto output = torch::empty(
-        {
-            batch_size,
-            num_players,
-            num_players,
-            6
-        },
+        {batch_size, num_players, num_players, kNumRelationFeatures},
         players.options()
     );
 
+    const int64_t total_pairs =
+        static_cast<int64_t>(batch_size) *
+        num_players *
+        num_players;
 
-    int total_pairs = (
-        batch_size
-        * num_players
-        * num_players
+    constexpr int threads = 256;
+
+    const int blocks = static_cast<int>(
+        (total_pairs + threads - 1) / threads
     );
 
+    // Important: use PyTorch's CURRENT stream, not CUDA stream 0.
+    cudaStream_t stream = c10::cuda::getCurrentCUDAStream().stream();
 
-    // 256 threads is a conventional starting point. CUDA divides the pair
-    // computation across enough blocks to cover the complete batch.
-
-    const int threads = 256;
-
-    const int blocks = (
-        total_pairs
-        + threads
-        - 1
-    ) / threads;
-
-
-    spatial_relations_kernel<<<
-        blocks,
-        threads
-    >>>(
+    spatial_relations_kernel<<<blocks, threads, 0, stream>>>(
         players.data_ptr<float>(),
         output.data_ptr<float>(),
         batch_size,
         num_players
     );
 
-
-    // Surface kernel launch errors immediately instead of allowing them to
-    // appear later in an unrelated PyTorch operation.
-
-    cudaError_t error = cudaGetLastError();
+    const cudaError_t error = cudaGetLastError();
 
     TORCH_CHECK(
         error == cudaSuccess,
-        "spatial_relations CUDA kernel failed: ",
+        "spatial_relations_kernel launch failed: ",
         cudaGetErrorString(error)
     );
-
 
     return output;
 }
