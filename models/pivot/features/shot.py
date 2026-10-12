@@ -1,6 +1,4 @@
-#we use distance and angle and describe shots to train a shot quality model.
-
-from math import atan2, sqrt
+from math import atan2, pi, sqrt
 
 from pivot.data.schema import Shot
 
@@ -31,10 +29,10 @@ def shot_angle(shot: Shot) -> float:
 
 def shot_numeric_features(shot: Shot) -> list[float]:
     return [
-        shot.x,
-        shot.y,
-        shot_distance(shot),
-        shot_angle(shot),
+        shot.x / 120.0,
+        shot.y / 80.0,
+        shot_distance(shot) / 120.0,
+        shot_angle(shot) / pi,
         float(shot.under_pressure),
         float(shot.one_on_one),
         float(shot.first_time),

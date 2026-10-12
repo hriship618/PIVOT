@@ -4,10 +4,12 @@ from typing import Optional
 
 @dataclass
 class PlayerState:
-    player_id: int
-    team_id: int
+    player_id: int | str
+    team_id: int | str
+
     x: float
     y: float
+
     vx: float = 0.0
     vy: float = 0.0
 
@@ -16,22 +18,26 @@ class PlayerState:
 class BallState:
     x: float
     y: float
+
     vx: float = 0.0
     vy: float = 0.0
 
 
 @dataclass
 class FrameState:
-    match_id: int
+    match_id: int | str
+
     period: int
     timestamp: float
 
-    home_team_id: int
-    away_team_id: int
-    possession_team_id: Optional[int]
+    home_team_id: int | str
+    away_team_id: int | str
+    possession_team_id: Optional[int | str]
 
     home_score: int
     away_score: int
+
+    ball_in_play: bool
 
     players: list[PlayerState]
     ball: BallState
@@ -57,4 +63,5 @@ class Shot:
     one_on_one: bool
     first_time: bool
 
+    statsbomb_xg: float
     goal: bool

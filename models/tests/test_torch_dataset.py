@@ -1,17 +1,18 @@
 from pivot.data.dataset import load_all_statsbomb_shots
 from pivot.data.torch_dataset import (
     ShotDataset,
-    split_shots_by_match,
+    split_shots_chronologically,
 )
 
 
 def main():
-    shots = load_all_statsbomb_shots(
-        "models/data/raw/statsbomb"
-    )
+    root = "models/data/raw/statsbomb"
 
-    train_shots, val_shots, test_shots = split_shots_by_match(
-        shots
+    shots = load_all_statsbomb_shots(root)
+
+    train_shots, val_shots, test_shots = split_shots_chronologically(
+        shots,
+        root,
     )
 
     train_dataset = ShotDataset(train_shots)

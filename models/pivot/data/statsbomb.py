@@ -83,6 +83,10 @@ def event_to_shot(event: dict, match_id: int) -> Shot | None:
             shot_data.get("first_time", False)
         ),
 
+        statsbomb_xg=float(
+            shot_data.get("statsbomb_xg", 0.0)
+        ),
+
         goal=outcome == "Goal",
     )
 

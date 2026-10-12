@@ -1,0 +1,1182 @@
+[
+  {
+    "player_id": "DFL-OBJ-0002AU",
+    "name": "Leroy San\u00e9",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": 0.000455,
+    "prototype_pivot": 14.3,
+    "rank": 1
+  },
+  {
+    "player_id": "DFL-OBJ-002GAB",
+    "name": "A. Yildirim",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 41.9,
+    "spatial_value": 0.000422,
+    "prototype_pivot": 12.96,
+    "rank": 2
+  },
+  {
+    "player_id": "DFL-OBJ-00003X",
+    "name": "D. Ginczek",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 1,
+    "minutes_sampled": 46.1,
+    "spatial_value": 0.000419,
+    "prototype_pivot": 12.84,
+    "rank": 3
+  },
+  {
+    "player_id": "DFL-OBJ-0028BZ",
+    "name": "C. Daferner",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 54.9,
+    "spatial_value": 0.000411,
+    "prototype_pivot": 12.49,
+    "rank": 4
+  },
+  {
+    "player_id": "DFL-OBJ-J01L1F",
+    "name": "Kwadwo Baah",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 2,
+    "minutes_sampled": 5.0,
+    "spatial_value": 0.000401,
+    "prototype_pivot": 12.08,
+    "rank": 5
+  },
+  {
+    "player_id": "DFL-OBJ-J0178P",
+    "name": "Kwadwo Duah",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 39.7,
+    "spatial_value": 0.000396,
+    "prototype_pivot": 11.88,
+    "rank": 6
+  },
+  {
+    "player_id": "DFL-OBJ-00008K",
+    "name": "R. Hennings",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 3,
+    "minutes_sampled": 73.0,
+    "spatial_value": 0.000394,
+    "prototype_pivot": 11.8,
+    "rank": 7
+  },
+  {
+    "player_id": "DFL-OBJ-002FXA",
+    "name": "K. Pr\u00f6ger",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 45.1,
+    "spatial_value": 0.000385,
+    "prototype_pivot": 11.43,
+    "rank": 8
+  },
+  {
+    "player_id": "DFL-OBJ-002GBW",
+    "name": "T. Lemperle",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 6.8,
+    "spatial_value": 0.000383,
+    "prototype_pivot": 11.34,
+    "rank": 9
+  },
+  {
+    "player_id": "DFL-OBJ-002FXT",
+    "name": "Dawid Kownacki",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 198.7,
+    "spatial_value": 0.000377,
+    "prototype_pivot": 11.12,
+    "rank": 10
+  },
+  {
+    "player_id": "DFL-OBJ-002GPI",
+    "name": "L. Lobinger",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 5.3,
+    "spatial_value": 0.000372,
+    "prototype_pivot": 10.92,
+    "rank": 11
+  },
+  {
+    "player_id": "DFL-OBJ-0028G2",
+    "name": "Aaron Opoku",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 27.6,
+    "spatial_value": 0.000371,
+    "prototype_pivot": 10.84,
+    "rank": 12
+  },
+  {
+    "player_id": "DFL-OBJ-002GDZ",
+    "name": "K. Caliskaner",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 2.1,
+    "spatial_value": 0.000369,
+    "prototype_pivot": 10.79,
+    "rank": 13
+  },
+  {
+    "player_id": "DFL-OBJ-000270",
+    "name": "D. Selke",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 42.3,
+    "spatial_value": 0.000363,
+    "prototype_pivot": 10.52,
+    "rank": 14
+  },
+  {
+    "player_id": "DFL-OBJ-0000YE",
+    "name": "Terrence Boyd",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 52.1,
+    "spatial_value": 0.00036,
+    "prototype_pivot": 10.4,
+    "rank": 15
+  },
+  {
+    "player_id": "DFL-OBJ-0000IA",
+    "name": "T. M\u00fcller",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 42.3,
+    "spatial_value": 0.000355,
+    "prototype_pivot": 10.22,
+    "rank": 16
+  },
+  {
+    "player_id": "DFL-OBJ-002G2Y",
+    "name": "Andreas Albers",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 46.4,
+    "spatial_value": 0.000352,
+    "prototype_pivot": 10.07,
+    "rank": 17
+  },
+  {
+    "player_id": "DFL-OBJ-0000F8",
+    "name": "F. Klaus",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 146.1,
+    "spatial_value": 0.000344,
+    "prototype_pivot": 9.74,
+    "rank": 18
+  },
+  {
+    "player_id": "DFL-OBJ-00019R",
+    "name": "J. Verhoek",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 45.1,
+    "spatial_value": 0.000343,
+    "prototype_pivot": 9.7,
+    "rank": 19
+  },
+  {
+    "player_id": "DFL-OBJ-0027G6",
+    "name": "Serge Gnabry",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": 0.000341,
+    "prototype_pivot": 9.64,
+    "rank": 20
+  },
+  {
+    "player_id": "DFL-OBJ-J01BGM",
+    "name": "D. Ljubicic",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 50.9,
+    "spatial_value": 0.000338,
+    "prototype_pivot": 9.53,
+    "rank": 21
+  },
+  {
+    "player_id": "DFL-OBJ-J01CVM",
+    "name": "M. Mansfeld",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 1,
+    "minutes_sampled": 0.1,
+    "spatial_value": 0.000335,
+    "prototype_pivot": 9.37,
+    "rank": 22
+  },
+  {
+    "player_id": "DFL-OBJ-002G89",
+    "name": "Jan Thielmann",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 15.3,
+    "spatial_value": 0.000325,
+    "prototype_pivot": 8.99,
+    "rank": 23
+  },
+  {
+    "player_id": "DFL-OBJ-0028OR",
+    "name": "P. Owusu",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 6.6,
+    "spatial_value": 0.000322,
+    "prototype_pivot": 8.85,
+    "rank": 24
+  },
+  {
+    "player_id": "DFL-OBJ-J01MF0",
+    "name": "Nils Fr\u00f6ling",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 6.4,
+    "spatial_value": 0.00032,
+    "prototype_pivot": 8.77,
+    "rank": 25
+  },
+  {
+    "player_id": "DFL-OBJ-0028JQ",
+    "name": "R. Munsy",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 6.4,
+    "spatial_value": 0.000319,
+    "prototype_pivot": 8.75,
+    "rank": 26
+  },
+  {
+    "player_id": "DFL-OBJ-0000RP",
+    "name": "E. Choupo-Moting",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 11.0,
+    "spatial_value": 0.000309,
+    "prototype_pivot": 8.34,
+    "rank": 27
+  },
+  {
+    "player_id": "DFL-OBJ-002GG4",
+    "name": "J. Castrop",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 54.9,
+    "spatial_value": 0.000306,
+    "prototype_pivot": 8.2,
+    "rank": 28
+  },
+  {
+    "player_id": "DFL-OBJ-00286U",
+    "name": "Manuel Wintzheimer",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 11.5,
+    "spatial_value": 0.000306,
+    "prototype_pivot": 8.19,
+    "rank": 29
+  },
+  {
+    "player_id": "DFL-OBJ-J01JQC",
+    "name": "D. Bunk",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 1,
+    "minutes_sampled": 2.6,
+    "spatial_value": 0.000291,
+    "prototype_pivot": 7.58,
+    "rank": 30
+  },
+  {
+    "player_id": "DFL-OBJ-0026PM",
+    "name": "Kingsley Coman",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 46.6,
+    "spatial_value": 0.000287,
+    "prototype_pivot": 7.45,
+    "rank": 31
+  },
+  {
+    "player_id": "DFL-OBJ-0027P7",
+    "name": "C. Viet",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 2.1,
+    "spatial_value": 0.000279,
+    "prototype_pivot": 7.09,
+    "rank": 32
+  },
+  {
+    "player_id": "DFL-OBJ-J01N65",
+    "name": "Mathys Tel",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 5.0,
+    "spatial_value": 0.000274,
+    "prototype_pivot": 6.91,
+    "rank": 33
+  },
+  {
+    "player_id": "DFL-OBJ-0027B0",
+    "name": "N. Shipnoski",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 41.9,
+    "spatial_value": 0.000266,
+    "prototype_pivot": 6.57,
+    "rank": 34
+  },
+  {
+    "player_id": "DFL-OBJ-0001ZY",
+    "name": "J. Zimmer",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 57.4,
+    "spatial_value": 0.000266,
+    "prototype_pivot": 6.57,
+    "rank": 35
+  },
+  {
+    "player_id": "DFL-OBJ-002G5J",
+    "name": "Shinta Appelkamp",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 98.5,
+    "spatial_value": 0.000265,
+    "prototype_pivot": 6.54,
+    "rank": 36
+  },
+  {
+    "player_id": "DFL-OBJ-J01DVC",
+    "name": "D. Huseinba\u0161i\u0107",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 15.3,
+    "spatial_value": 0.000264,
+    "prototype_pivot": 6.51,
+    "rank": 37
+  },
+  {
+    "player_id": "DFL-OBJ-0025YM",
+    "name": "M. Wunderlich",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 47.6,
+    "spatial_value": 0.000263,
+    "prototype_pivot": 6.47,
+    "rank": 38
+  },
+  {
+    "player_id": "DFL-OBJ-0027XP",
+    "name": "J. Mees",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 46.4,
+    "spatial_value": 0.000262,
+    "prototype_pivot": 6.41,
+    "rank": 39
+  },
+  {
+    "player_id": "DFL-OBJ-0026RH",
+    "name": "E. Iyoha",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 102.8,
+    "spatial_value": 0.00025,
+    "prototype_pivot": 5.91,
+    "rank": 40
+  },
+  {
+    "player_id": "DFL-OBJ-002GM1",
+    "name": "Kristoffer Peterson",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 144.1,
+    "spatial_value": 0.000241,
+    "prototype_pivot": 5.56,
+    "rank": 41
+  },
+  {
+    "player_id": "DFL-OBJ-00017G",
+    "name": "P. Klement",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 9.8,
+    "spatial_value": 0.00024,
+    "prototype_pivot": 5.52,
+    "rank": 42
+  },
+  {
+    "player_id": "DFL-OBJ-00265G",
+    "name": "Kenny Prince Redondo",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 54.7,
+    "spatial_value": 0.000232,
+    "prototype_pivot": 5.16,
+    "rank": 43
+  },
+  {
+    "player_id": "DFL-OBJ-J01GG9",
+    "name": "D. Lee",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 29.7,
+    "spatial_value": 0.000228,
+    "prototype_pivot": 5.01,
+    "rank": 44
+  },
+  {
+    "player_id": "DFL-OBJ-0028BD",
+    "name": "L. Maina",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 50.9,
+    "spatial_value": 0.000225,
+    "prototype_pivot": 4.91,
+    "rank": 45
+  },
+  {
+    "player_id": "DFL-OBJ-0027AX",
+    "name": "F. Kainz",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 42.3,
+    "spatial_value": 0.000225,
+    "prototype_pivot": 4.91,
+    "rank": 46
+  },
+  {
+    "player_id": "DFL-OBJ-0002BO",
+    "name": "B. Schmitz",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 42.3,
+    "spatial_value": 0.000212,
+    "prototype_pivot": 4.38,
+    "rank": 47
+  },
+  {
+    "player_id": "DFL-OBJ-J01KGY",
+    "name": "S. Thill",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 21.9,
+    "spatial_value": 0.000211,
+    "prototype_pivot": 4.34,
+    "rank": 48
+  },
+  {
+    "player_id": "DFL-OBJ-002595",
+    "name": "M. M\u00f8ller D\u00e6hli",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 39.7,
+    "spatial_value": 0.000211,
+    "prototype_pivot": 4.32,
+    "rank": 49
+  },
+  {
+    "player_id": "DFL-OBJ-002G78",
+    "name": "L. Schleimer",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 15.2,
+    "spatial_value": 0.00021,
+    "prototype_pivot": 4.29,
+    "rank": 50
+  },
+  {
+    "player_id": "DFL-OBJ-0001IG",
+    "name": "N. Neidhart",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 51.6,
+    "spatial_value": 0.000206,
+    "prototype_pivot": 4.13,
+    "rank": 51
+  },
+  {
+    "player_id": "DFL-OBJ-0028T3",
+    "name": "L. Tempelmann",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 54.9,
+    "spatial_value": 0.000193,
+    "prototype_pivot": 3.58,
+    "rank": 52
+  },
+  {
+    "player_id": "DFL-OBJ-0028IJ",
+    "name": "P. Breier",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 26.1,
+    "spatial_value": 0.000188,
+    "prototype_pivot": 3.37,
+    "rank": 53
+  },
+  {
+    "player_id": "DFL-OBJ-002G0F",
+    "name": "Daniel Hanslik",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 2.8,
+    "spatial_value": 0.000187,
+    "prototype_pivot": 3.34,
+    "rank": 54
+  },
+  {
+    "player_id": "DFL-OBJ-0000NZ",
+    "name": "Matthias Zimmermann",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 212.5,
+    "spatial_value": 0.000177,
+    "prototype_pivot": 2.94,
+    "rank": 55
+  },
+  {
+    "player_id": "DFL-OBJ-0002DT",
+    "name": "Marlon Ritter",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 57.4,
+    "spatial_value": 0.000176,
+    "prototype_pivot": 2.9,
+    "rank": 56
+  },
+  {
+    "player_id": "DFL-OBJ-J01NQ8",
+    "name": "E. Fernandes Neto",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 3,
+    "minutes_sampled": 24.2,
+    "spatial_value": 0.000173,
+    "prototype_pivot": 2.77,
+    "rank": 57
+  },
+  {
+    "player_id": "DFL-OBJ-002GCR",
+    "name": "J. Musiala",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 5.0,
+    "spatial_value": 0.000158,
+    "prototype_pivot": 2.15,
+    "rank": 58
+  },
+  {
+    "player_id": "DFL-OBJ-002GKO",
+    "name": "E. Martel",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": 0.000146,
+    "prototype_pivot": 1.68,
+    "rank": 59
+  },
+  {
+    "player_id": "DFL-OBJ-J01H9X",
+    "name": "A. Tanaka",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 2,
+    "minutes_sampled": 88.1,
+    "spatial_value": 0.000138,
+    "prototype_pivot": 1.33,
+    "rank": 60
+  },
+  {
+    "player_id": "DFL-OBJ-002GLL",
+    "name": "Svante Ingelsson",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 25.5,
+    "spatial_value": 0.000133,
+    "prototype_pivot": 1.14,
+    "rank": 61
+  },
+  {
+    "player_id": "DFL-OBJ-0027V2",
+    "name": "K. Schindler",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 15.3,
+    "spatial_value": 0.000133,
+    "prototype_pivot": 1.13,
+    "rank": 62
+  },
+  {
+    "player_id": "DFL-OBJ-0028SW",
+    "name": "K. Faber",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 48.5,
+    "spatial_value": 0.000129,
+    "prototype_pivot": 0.97,
+    "rank": 63
+  },
+  {
+    "player_id": "DFL-OBJ-0028CD",
+    "name": "C. Makridis",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 6.6,
+    "spatial_value": 0.000122,
+    "prototype_pivot": 0.68,
+    "rank": 64
+  },
+  {
+    "player_id": "DFL-OBJ-00021G",
+    "name": "E. Durm",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 57.4,
+    "spatial_value": 0.00012,
+    "prototype_pivot": 0.61,
+    "rank": 65
+  },
+  {
+    "player_id": "DFL-OBJ-0027VS",
+    "name": "M. Thalhammer",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 48.5,
+    "spatial_value": 0.000103,
+    "prototype_pivot": -0.1,
+    "rank": 66
+  },
+  {
+    "player_id": "DFL-OBJ-0027G0",
+    "name": "Benjamin Pavard",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": 0.000101,
+    "prototype_pivot": -0.18,
+    "rank": 67
+  },
+  {
+    "player_id": "DFL-OBJ-00028V",
+    "name": "M. Sobottka",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 212.5,
+    "spatial_value": 9.7e-05,
+    "prototype_pivot": -0.33,
+    "rank": 68
+  },
+  {
+    "player_id": "DFL-OBJ-J0196K",
+    "name": "D. Dressel",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 51.6,
+    "spatial_value": 8.3e-05,
+    "prototype_pivot": -0.89,
+    "rank": 69
+  },
+  {
+    "player_id": "DFL-OBJ-J01B8N",
+    "name": "Ryan Gravenberch",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 46.6,
+    "spatial_value": 7.9e-05,
+    "prototype_pivot": -1.05,
+    "rank": 70
+  },
+  {
+    "player_id": "DFL-OBJ-000191",
+    "name": "Leon Goretzka",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 6.0,
+    "spatial_value": 6.8e-05,
+    "prototype_pivot": -1.51,
+    "rank": 71
+  },
+  {
+    "player_id": "DFL-OBJ-002651",
+    "name": "Benedikt Gimber",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 48.5,
+    "spatial_value": 6.3e-05,
+    "prototype_pivot": -1.71,
+    "rank": 72
+  },
+  {
+    "player_id": "DFL-OBJ-0002F5",
+    "name": "Joshua Kimmich",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": 5.5e-05,
+    "prototype_pivot": -2.05,
+    "rank": 73
+  },
+  {
+    "player_id": "DFL-OBJ-002G4A",
+    "name": "Ellyes Skhiri",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": 3.8e-05,
+    "prototype_pivot": -2.74,
+    "rank": 74
+  },
+  {
+    "player_id": "DFL-OBJ-J0130T",
+    "name": "Jorrit Hendrix",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 3,
+    "minutes_sampled": 117.3,
+    "spatial_value": 2.6e-05,
+    "prototype_pivot": -3.23,
+    "rank": 75
+  },
+  {
+    "player_id": "DFL-OBJ-0001BX",
+    "name": "E. Valentini",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 8.2,
+    "spatial_value": 2.3e-05,
+    "prototype_pivot": -3.34,
+    "rank": 76
+  },
+  {
+    "player_id": "DFL-OBJ-0001LJ",
+    "name": "Jan Gyamerah",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 46.7,
+    "spatial_value": 1.8e-05,
+    "prototype_pivot": -3.55,
+    "rank": 77
+  },
+  {
+    "player_id": "DFL-OBJ-J01K2L",
+    "name": "S. Fofana",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 8.2,
+    "spatial_value": 1.6e-05,
+    "prototype_pivot": -3.65,
+    "rank": 78
+  },
+  {
+    "player_id": "DFL-OBJ-0026ZI",
+    "name": "Kristian Pedersen",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 6.8,
+    "spatial_value": 9e-06,
+    "prototype_pivot": -3.91,
+    "rank": 79
+  },
+  {
+    "player_id": "DFL-OBJ-0028GO",
+    "name": "H. \u00c7ift\u00e7i",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 29.8,
+    "spatial_value": 3e-06,
+    "prototype_pivot": -4.15,
+    "rank": 80
+  },
+  {
+    "player_id": "DFL-OBJ-002FYC",
+    "name": "F. N\u00fcrnberger",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 43.4,
+    "spatial_value": 2e-06,
+    "prototype_pivot": -4.2,
+    "rank": 81
+  },
+  {
+    "player_id": "DFL-OBJ-J01APO",
+    "name": "N. Mazraoui",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 52.6,
+    "spatial_value": 1e-06,
+    "prototype_pivot": -4.25,
+    "rank": 82
+  },
+  {
+    "player_id": "DFL-OBJ-0026ZT",
+    "name": "Anderson Lucoqui",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 51.6,
+    "spatial_value": -4e-06,
+    "prototype_pivot": -4.44,
+    "rank": 83
+  },
+  {
+    "player_id": "DFL-OBJ-0001CF",
+    "name": "T. Mei\u00dfner",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 6.4,
+    "spatial_value": -7e-06,
+    "prototype_pivot": -4.56,
+    "rank": 84
+  },
+  {
+    "player_id": "DFL-OBJ-0025BB",
+    "name": "Lukas Fr\u00f6de",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 51.6,
+    "spatial_value": -7e-06,
+    "prototype_pivot": -4.59,
+    "rank": 85
+  },
+  {
+    "player_id": "DFL-OBJ-0000EJ",
+    "name": "J. Geis",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 46.7,
+    "spatial_value": -8e-06,
+    "prototype_pivot": -4.62,
+    "rank": 86
+  },
+  {
+    "player_id": "DFL-OBJ-0026WW",
+    "name": "R. Bormuth",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 57.4,
+    "spatial_value": -1.1e-05,
+    "prototype_pivot": -4.74,
+    "rank": 87
+  },
+  {
+    "player_id": "DFL-OBJ-00012X",
+    "name": "Jonas Hector",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": -1.8e-05,
+    "prototype_pivot": -5.03,
+    "rank": 88
+  },
+  {
+    "player_id": "DFL-OBJ-J01KJ5",
+    "name": "M. Karbownik",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 3,
+    "minutes_sampled": 163.9,
+    "spatial_value": -2e-05,
+    "prototype_pivot": -5.09,
+    "rank": 89
+  },
+  {
+    "player_id": "DFL-OBJ-0026MI",
+    "name": "Dominik Schad",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 29.8,
+    "spatial_value": -2.2e-05,
+    "prototype_pivot": -5.2,
+    "rank": 90
+  },
+  {
+    "player_id": "DFL-OBJ-0028KZ",
+    "name": "Frederic Ananou",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 45.1,
+    "spatial_value": -2.7e-05,
+    "prototype_pivot": -5.39,
+    "rank": 91
+  },
+  {
+    "player_id": "DFL-OBJ-J01CP5",
+    "name": "N. Gavory",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 2,
+    "minutes_sampled": 64.4,
+    "spatial_value": -3.4e-05,
+    "prototype_pivot": -5.66,
+    "rank": 92
+  },
+  {
+    "player_id": "DFL-OBJ-0026IA",
+    "name": "E. Wekesser",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 15.2,
+    "spatial_value": -3.9e-05,
+    "prototype_pivot": -5.89,
+    "rank": 93
+  },
+  {
+    "player_id": "DFL-OBJ-002GFH",
+    "name": "Scott Kennedy",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 11.7,
+    "spatial_value": -4.4e-05,
+    "prototype_pivot": -6.08,
+    "rank": 94
+  },
+  {
+    "player_id": "DFL-OBJ-002GMO",
+    "name": "Tim Oberdorf",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 3,
+    "minutes_sampled": 163.9,
+    "spatial_value": -4.6e-05,
+    "prototype_pivot": -6.18,
+    "rank": 95
+  },
+  {
+    "player_id": "DFL-OBJ-0026UQ",
+    "name": "L. Guwara",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 36.9,
+    "spatial_value": -4.9e-05,
+    "prototype_pivot": -6.29,
+    "rank": 96
+  },
+  {
+    "player_id": "DFL-OBJ-0027B6",
+    "name": "Timo H\u00fcbers",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": -5.2e-05,
+    "prototype_pivot": -6.43,
+    "rank": 97
+  },
+  {
+    "player_id": "DFL-OBJ-J015S4",
+    "name": "Joao Cancelo",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 15.3,
+    "spatial_value": -7.5e-05,
+    "prototype_pivot": -7.37,
+    "rank": 98
+  },
+  {
+    "player_id": "DFL-OBJ-0027KL",
+    "name": "Dayot Upamecano",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": -7.7e-05,
+    "prototype_pivot": -7.42,
+    "rank": 99
+  },
+  {
+    "player_id": "DFL-OBJ-002GPN",
+    "name": "B. Tomiak",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 57.4,
+    "spatial_value": -8e-05,
+    "prototype_pivot": -7.55,
+    "rank": 100
+  },
+  {
+    "player_id": "DFL-OBJ-00006V",
+    "name": "A. Hoffmann",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 1,
+    "minutes_sampled": 36.9,
+    "spatial_value": -8.1e-05,
+    "prototype_pivot": -7.59,
+    "rank": 101
+  },
+  {
+    "player_id": "DFL-OBJ-00268T",
+    "name": "S. Breitkreuz",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 48.5,
+    "spatial_value": -9.8e-05,
+    "prototype_pivot": -8.28,
+    "rank": 102
+  },
+  {
+    "player_id": "DFL-OBJ-00008F",
+    "name": "Christopher Schindler",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 54.9,
+    "spatial_value": -0.000145,
+    "prototype_pivot": -10.22,
+    "rank": 103
+  },
+  {
+    "player_id": "DFL-OBJ-002G68",
+    "name": "James Lawrence",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 54.9,
+    "spatial_value": -0.000148,
+    "prototype_pivot": -10.33,
+    "rank": 104
+  },
+  {
+    "player_id": "DFL-OBJ-00286X",
+    "name": "R. van Drongelen",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 51.6,
+    "spatial_value": -0.000149,
+    "prototype_pivot": -10.36,
+    "rank": 105
+  },
+  {
+    "player_id": "DFL-OBJ-002GEE",
+    "name": "J. Elvedi",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 48.5,
+    "spatial_value": -0.000169,
+    "prototype_pivot": -11.2,
+    "rank": 106
+  },
+  {
+    "player_id": "DFL-OBJ-0000F9",
+    "name": "K. Kraus",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 27.6,
+    "spatial_value": -0.00017,
+    "prototype_pivot": -11.23,
+    "rank": 107
+  },
+  {
+    "player_id": "DFL-OBJ-002GM9",
+    "name": "C. Klarer",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 175.6,
+    "spatial_value": -0.000175,
+    "prototype_pivot": -11.44,
+    "rank": 108
+  },
+  {
+    "player_id": "DFL-OBJ-J01D1W",
+    "name": "Jeff Chabot",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": -0.000177,
+    "prototype_pivot": -11.51,
+    "rank": 109
+  },
+  {
+    "player_id": "DFL-OBJ-J014UG",
+    "name": "Jordy de Wijs",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 1,
+    "minutes_sampled": 48.5,
+    "spatial_value": -0.000188,
+    "prototype_pivot": -11.95,
+    "rank": 110
+  },
+  {
+    "player_id": "DFL-OBJ-J017RE",
+    "name": "M. de Ligt",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": -0.000193,
+    "prototype_pivot": -12.17,
+    "rank": 111
+  },
+  {
+    "player_id": "DFL-OBJ-002FZB",
+    "name": "M. Kolke",
+    "team_id": "DFL-CLU-00000Q",
+    "matches": 1,
+    "minutes_sampled": 51.6,
+    "spatial_value": -0.000526,
+    "prototype_pivot": -25.75,
+    "rank": 112
+  },
+  {
+    "player_id": "DFL-OBJ-00003W",
+    "name": "A. Luthe",
+    "team_id": "DFL-CLU-00000I",
+    "matches": 1,
+    "minutes_sampled": 57.4,
+    "spatial_value": -0.000546,
+    "prototype_pivot": -26.58,
+    "rank": 113
+  },
+  {
+    "player_id": "DFL-OBJ-0002HE",
+    "name": "M. Schw\u00e4be",
+    "team_id": "DFL-CLU-000008",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": -0.000559,
+    "prototype_pivot": -27.1,
+    "rank": 114
+  },
+  {
+    "player_id": "DFL-OBJ-002GNH",
+    "name": "D. Stojanovic",
+    "team_id": "DFL-CLU-000011",
+    "matches": 1,
+    "minutes_sampled": 48.5,
+    "spatial_value": -0.000573,
+    "prototype_pivot": -27.69,
+    "rank": 115
+  },
+  {
+    "player_id": "DFL-OBJ-0028FW",
+    "name": "F. Kastenmeier",
+    "team_id": "DFL-CLU-00000P",
+    "matches": 4,
+    "minutes_sampled": 212.5,
+    "spatial_value": -0.00059,
+    "prototype_pivot": -28.38,
+    "rank": 116
+  },
+  {
+    "player_id": "DFL-OBJ-0001HW",
+    "name": "C. Mathenia",
+    "team_id": "DFL-CLU-000005",
+    "matches": 1,
+    "minutes_sampled": 54.9,
+    "spatial_value": -0.000659,
+    "prototype_pivot": -31.21,
+    "rank": 117
+  },
+  {
+    "player_id": "DFL-OBJ-0002DR",
+    "name": "Y. Sommer",
+    "team_id": "DFL-CLU-00000G",
+    "matches": 1,
+    "minutes_sampled": 57.6,
+    "spatial_value": -0.000699,
+    "prototype_pivot": -32.85,
+    "rank": 118
+  }
+]
