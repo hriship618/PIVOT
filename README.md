@@ -1,5 +1,9 @@
 # PIVOT — Player Impact via Outcomes and Tracking
 
+> The active cleanup-only implementation is documented in `models/README.md`.
+> The research design below is retained as future-methodology documentation and
+> is not the current executable pipeline.
+
 PIVOT is a real-data soccer player rating that combines a transferable event-value model with synchronized tracking counterfactuals. The production rankings use 64 FIFA World Cup 2022 matches from StatsBomb Open Data and seven DFL/IDSSE matches with continuous tracking. Synthetic data is restricted to tests and never enters the dashboard artifact.
 
 ## One-command pipeline

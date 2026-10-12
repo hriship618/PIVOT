@@ -10,5 +10,8 @@ __pycache__/
 *.egg-info/
 *.tsbuildinfo
 benchmark-results.json
-models/data/raw/
-models/data/processed/
+
+# Local datasets, derived rankings, and trained checkpoints are reproducible or
+# too large for Git. Keep the standard directory layout, but not its contents.
+models/data/raw/**
+models/data/processed/**
